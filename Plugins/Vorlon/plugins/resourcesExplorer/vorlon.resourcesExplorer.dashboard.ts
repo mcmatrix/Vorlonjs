@@ -1,9 +1,6 @@
 ﻿module VORLON {
-    
     declare var $: any;
-    
     export class ResourcesExplorerDashboard extends DashboardPlugin {
-        
         constructor() {
             super("resourcesExplorer", "control.html", "control.css", "control.js");
             this._ready = false;
@@ -15,23 +12,21 @@
         private _containerSessionStorage: HTMLElement;
         private _containerCookies: HTMLElement;
         private _containerDiv: HTMLElement;
-        
-        
+
         public startDashboardSide(div: HTMLDivElement = null): void {
             this._insertHtmlContentAsync(div, (filledDiv) => {
                 this._containerDiv = filledDiv;
                 this._containerLocalStorage = Tools.QuerySelectorById(div, "localStorageTable");
                 this._containerSessionStorage = Tools.QuerySelectorById(div, "sessionStorageTable");
                 this._containerCookies = Tools.QuerySelectorById(div, "cookiesTable");
-                
+
                 this.toogleMenu();
                 this.searchResource();
                 this.buttonEvent();
                 this.addResource();
                 this.removeResource();
                 this.updateResource();
-                
-                this._ready = true;                
+                this._ready = true;
             })
         }
 
@@ -48,9 +43,8 @@
         }
 
         public addResource(): void {
-            
             var _that = this;
-            
+
             $('.new-entry-localstorage input').keypress(function(e) {
                 if(e.which == 13) {
                     var key = $('.new-entry-localstorage').find('.new-key-localstorage');
@@ -91,13 +85,12 @@
                     _that.sendCommandToClient('refresh');
                     $('.new-entry').fadeOut();
                 }
-            });       
+            });
         }
 
         public removeResource(): void {
-            
             var _that = this;
-            
+
             $('#localStorageTable').on('click', '.actionClass', function() {
                 var key = $(this).next('td').text();
                 _that.sendCommandToClient('order', {
@@ -105,7 +98,7 @@
                 });
                 $(this).parent().remove();
             });
-            
+
             $('#sessionStorageTable').on('click', '.actionClass', function() {
                 var key = $(this).next('td').text();
                 _that.sendCommandToClient('order', {
@@ -113,7 +106,7 @@
                 });
                 $(this).parent().remove();
             });
-            
+
             $('#cookiesTable').on('click', '.actionClass', function() {
                 var key = $(this).next('td').text();
                 _that.sendCommandToClient('order', {
@@ -124,9 +117,8 @@
         }
 
         public updateResource(): void {
-            
             var _that = this;
-            
+
             $('.table-resources-localStorage').on('change', function(evt, newValue) {
                 if($(evt.target).hasClass('keyClass')) {
                     var key = $(evt.target).data('key');
@@ -141,7 +133,7 @@
                     });
                 }
             });
-            
+
             $('.table-resources-sessionStorage').on('change', function(evt, newValue) {
                 if($(evt.target).hasClass('keyClass')) {
                     var key = $(evt.target).data('key');
@@ -156,7 +148,7 @@
                     });
                 }
             });
-            
+
             $('.table-resources-cookies').on('change', function(evt, newValue) {
                 if($(evt.target).hasClass('keyClass')) {
                     var key = $(evt.target).data('key');
@@ -184,7 +176,7 @@
             $('.refresh').click(() => {
                 this.sendCommandToClient('refresh');
             });
-            
+
             $('.add-value').click(() => {
                 if($('.new-entry').is(':visible')) {
                     $('.new-entry').fadeOut();
@@ -203,19 +195,19 @@
                 $('#' + $(this).data('menu')).show();
                 $('.new-entry').fadeOut();
                 $(this).addClass('active-menu');
-            });                 
+            });
         }
 
         public processEntries(receivedObject: any): void {
             if (!this._containerLocalStorage){
                 console.warn("ResourcesExplorer dashboard receive client message but is not ready");
                 return;
-            }     
-            
+            }
+
             this._containerLocalStorage.innerHTML = "";
             this._containerSessionStorage.innerHTML = "";
             this._containerCookies.innerHTML = "";
-            
+
             if (!receivedObject)
                 return;
 
@@ -224,19 +216,19 @@
                     var tr = document.createElement('tr');
                     var tdKey = document.createElement('td');
                     var tdValue = document.createElement('td');
-                    var tdAction = document.createElement('td');                    
-                    
+                    var tdAction = document.createElement('td');
+
                     tdKey.className += " keyClass";
                     tdKey.dataset['key'] = receivedObject.localStorageList[i].key;
-                    
+
                     tdValue.className += " valueClass";
-                    tdAction.className += " actionClass";                    
-                    
+                    tdAction.className += " actionClass";
+
                     tdKey.innerHTML = receivedObject.localStorageList[i].key;
                     tdValue.innerHTML = receivedObject.localStorageList[i].value;
-                    tdAction.innerHTML = '<i class="fa fa-times"></i>';   
+                    tdAction.innerHTML = '<i class="fa fa-times"></i>';
 
-                    tr.appendChild(tdAction);                    
+                    tr.appendChild(tdAction);
                     tr.appendChild(tdKey);
                     tr.appendChild(tdValue);
                     this._containerLocalStorage.appendChild(tr);
@@ -249,16 +241,16 @@
                     var tr = document.createElement('tr');
                     var tdKey = document.createElement('td');
                     var tdValue = document.createElement('td');
-                    var tdAction = document.createElement('td');  
+                    var tdAction = document.createElement('td');
 
                     tdKey.className += " keyClass";
                     tdKey.dataset['key'] = receivedObject.cookiesList[i].key;
                     tdValue.className += " valueClass";
-                    tdAction.className += " actionClass";   
-                    
+                    tdAction.className += " actionClass";
+
                     tdKey.innerHTML = receivedObject.cookiesList[i].key;
                     tdValue.innerHTML = receivedObject.cookiesList[i].value;
-                    tdAction.innerHTML = '<i class="fa fa-times"></i>';   
+                    tdAction.innerHTML = '<i class="fa fa-times"></i>';
 
                     tr.appendChild(tdAction);
                     tr.appendChild(tdKey);
@@ -267,22 +259,22 @@
                 }
                 $('.table-resources-cookies').editableTableWidget({editor: $('<textarea>')});
             }
-            
+
             if (receivedObject.sessionStorageList) {
                 for (var i = 0; i < receivedObject.sessionStorageList.length; i++) {
                     var tr = document.createElement('tr');
                     var tdKey = document.createElement('td');
                     var tdValue = document.createElement('td');
-                    var tdAction = document.createElement('td');  
+                    var tdAction = document.createElement('td');
 
                     tdKey.className += " keyClass";
                     tdKey.dataset['key'] = receivedObject.sessionStorageList[i].key;
                     tdValue.className += " valueClass";
-                    tdAction.className += " actionClass";   
-                    
+                    tdAction.className += " actionClass";
+
                     tdKey.innerHTML = receivedObject.sessionStorageList[i].key;
                     tdValue.innerHTML = receivedObject.sessionStorageList[i].value;
-                    tdAction.innerHTML = '<i class="fa fa-times"></i>';   
+                    tdAction.innerHTML = '<i class="fa fa-times"></i>';
 
                     tr.appendChild(tdAction);
                     tr.appendChild(tdKey);
@@ -290,8 +282,7 @@
                     this._containerSessionStorage.appendChild(tr);
                 }
                  $('.table-resources-sessionStorage').editableTableWidget({editor: $('<textarea>')});
-            }            
-            
+            }
         }
     }
 
@@ -301,7 +292,7 @@
             plugin.processEntries(data);
         }
     };
-    
-    //Register the plugin with vorlon core 
+
+    //Register the plugin with vorlon core
     Core.RegisterDashboardPlugin(new ResourcesExplorerDashboard());
-} 
+}
