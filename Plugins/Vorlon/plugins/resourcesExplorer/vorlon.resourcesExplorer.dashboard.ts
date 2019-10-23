@@ -49,8 +49,9 @@
                 if(e.which == 13) {
                     var key = $('.new-entry-localstorage').find('.new-key-localstorage');
                     var value = $('.new-entry-localstorage').find('.new-value-localstorage');
+                    var encoded_value = encodeURI(value.val());
                     _that.sendCommandToClient('order', {
-                        order: "localStorage.setItem('"+key.val()+"', '"+value.val()+"')"
+                        order: "localStorage.setItem('" + key.val() + "', decodeURI(\"" + encoded_value + "\"));"
                     });
                     key.val('');
                     value.val('');
@@ -63,8 +64,9 @@
                 if(e.which == 13) {
                     var key = $('.new-entry-sessionstorage').find('.new-key-sessionstorage');
                     var value = $('.new-entry-sessionstorage').find('.new-value-sessionstorage');
+                    var encoded_value = encodeURI(value.val());
                     _that.sendCommandToClient('order', {
-                        order: "sessionStorage.setItem('"+key.val()+"', '"+value.val()+"')"
+                        order: "sessionStorage.setItem('" + key.val() + "', decodeURI(\"" + encoded_value + "\"));"
                     });
                     key.val('');
                     value.val('');
@@ -128,8 +130,9 @@
                     $(evt.target).data('key', newValue);
                 } else {
                     var key = $(evt.target).prev('td').text();
+                    var encoded_value = encodeURI(newValue);
                     _that.sendCommandToClient('order', {
-                        order: "localStorage.setItem('"+key+"', '"+newValue+"')"
+                        order: "localStorage.setItem('" + key + "', decodeURI(\"" + encoded_value + "\"));"
                     });
                 }
             });
@@ -143,8 +146,9 @@
                     $(evt.target).data('key', newValue);
                 } else {
                     var key = $(evt.target).prev('td').text();
+                    var encoded_value = encodeURI(newValue);
                     _that.sendCommandToClient('order', {
-                        order: "sessionStorage.setItem('"+key+"', '"+newValue+"')"
+                        order: "sessionStorage.setItem('" + key + "', decodeURI(\"" + encoded_value + "\"));"
                     });
                 }
             });
@@ -224,8 +228,8 @@
                     tdValue.className += " valueClass";
                     tdAction.className += " actionClass";
 
-                    tdKey.innerHTML = receivedObject.localStorageList[i].key;
-                    tdValue.innerHTML = receivedObject.localStorageList[i].value;
+                    tdKey.innerText = receivedObject.localStorageList[i].key;
+                    tdValue.innerText = receivedObject.localStorageList[i].value;
                     tdAction.innerHTML = '<i class="fa fa-times"></i>';
 
                     tr.appendChild(tdAction);
@@ -248,8 +252,8 @@
                     tdValue.className += " valueClass";
                     tdAction.className += " actionClass";
 
-                    tdKey.innerHTML = receivedObject.cookiesList[i].key;
-                    tdValue.innerHTML = receivedObject.cookiesList[i].value;
+                    tdKey.innerText = receivedObject.cookiesList[i].key;
+                    tdValue.innerText = receivedObject.cookiesList[i].value;
                     tdAction.innerHTML = '<i class="fa fa-times"></i>';
 
                     tr.appendChild(tdAction);
@@ -272,8 +276,8 @@
                     tdValue.className += " valueClass";
                     tdAction.className += " actionClass";
 
-                    tdKey.innerHTML = receivedObject.sessionStorageList[i].key;
-                    tdValue.innerHTML = receivedObject.sessionStorageList[i].value;
+                    tdKey.innerText = receivedObject.sessionStorageList[i].key;
+                    tdValue.innerText = receivedObject.sessionStorageList[i].value;
                     tdAction.innerHTML = '<i class="fa fa-times"></i>';
 
                     tr.appendChild(tdAction);

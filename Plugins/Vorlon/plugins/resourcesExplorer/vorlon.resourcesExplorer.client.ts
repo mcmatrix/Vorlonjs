@@ -9,7 +9,7 @@
             this._ready = true;
             this._id = "RESOURCES";
             //this.debug = true;
-            
+
             window.addEventListener("load", () => {
                 this.sendClientData();
             });
@@ -44,8 +44,9 @@
         public refresh(): void {
             this.sendClientData();
         }
-        
+
         public evalOrderFromDashboard(order: string) {
+            //console.log("eval order", order);
             try {
                 eval(order);
             } catch (e) {
@@ -53,7 +54,7 @@
             }
         }
     }
-    
+
     ResourcesExplorerClient.prototype.ClientCommands = {
         refresh: function (data: any) {
             var plugin = <ResourcesExplorerClient>this;
@@ -65,6 +66,6 @@
         }
     };
 
-    //Register the plugin with vorlon core 
+    //Register the plugin with vorlon core
     Core.RegisterClientPlugin(new ResourcesExplorerClient());
-} 
+}
